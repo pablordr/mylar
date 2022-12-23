@@ -1,5 +1,12 @@
 a sample web app to test things on
 
+Checkpoint 2: Cookies
+
+- Now it has a simple user_name cookie. Easy to manipulate. 
+- Each view shows the value of the cookie.
+- It will be used to assign edit ops to an user. 
+
+
 Checkpoint 1: Minimum features
 
 - Show all entries via `/entries`

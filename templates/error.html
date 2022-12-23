@@ -1,11 +1,17 @@
 <html>
 <body>
-<div style="margin:0px 0px 10px 0px; padding:4px; border: 1px solid black; vertical-align: center;">
-<a href="/add">Add an entry</a>
-<a href="/edit">Edit an entry</a>
-<a href="/entry">Check an entry</a>
-<a href="/entries">List all entries</a>
-</div>
+  <div style="margin:0px 0px 10px 0px; padding:4px; border: 1px solid black; vertical-align: center;">
+    <a href="/add">Add an entry</a>
+    <a href="/edit">Edit an entry</a>
+    <a href="/entry">Check an entry</a>
+    <a href="/entries">List all entries</a>
+    <a href="/login">Login</a>
+    {% if user %}
+        <span style="margin-left: 20em;">Logged in as {{ user }}</span>
+    {% else %}
+        <span style="margin-left: 20em;">Not logged in</span>
+    {% endif %}
+    </div>
 
 {{ msg }}
 
