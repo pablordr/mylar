@@ -1,32 +1,59 @@
-<html>
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <style>
+    body {
+      margin: 0px;
+    }
+
+    a,
+    a:visited,
+    a:hover {
+      text-decoration: none;
+    }
+
+    #cont {
+      margin: 2em;
+    }
+  </style>
+</head>
+
 <body>
-  <div style="margin:0px 0px 10px 0px; padding:4px; border: 1px solid black; vertical-align: center;">
-    <a href="/add">Add an entry</a>
-    <a href="/edit">Edit an entry</a>
-    <a href="/entry">Check an entry</a>
-    <a href="/entries">List all entries</a>
-    <a href="/login">Login</a>
-    {% if user %}
-        <span style="margin-left: 20em;">Logged in as {{ user }}</span>
-    {% else %}
-        <span style="margin-left: 20em;">Not logged in</span>
+  <table width="800" border="0" cellpadding="2" cellspacing="0" bgcolor="#f5f5f5">
+    <tr>
+      <td width="60%">
+        <a href="/add">Add entry &nbsp;</a>
+        <a href="/edit">Edit entry &nbsp;</a>
+        <a href="/entry">Check entry &nbsp;</a>
+        <a href="/entries">List entries &nbsp;</a>
+        <a href="/login">Login</a>
+      </td>
+      <td width="40%" align="right">
+        {% if user %}
+        Logged in as {{ user }}
+        {% else %}
+        Not logged in
+        {% endif %}
+      </td>
+    </tr>
+  </table>
+
+
+  <div id="cont">
+    {% if msg %}
+    {{ msg }}
     {% endif %}
-    </div>
 
-{% if msg %}
-  {{ msg }}
-{% else %}
-   <!-- no message, add nothing -->
-{% endif %}
-
-<br>
-
-<form action="http://localhost:5000/login" method="POST">
-  <label for="tb_user">User:</label>
-  <input type="text" id="tb_user" name="tb_user">
-  <input type="submit" value="Submit">
-</form>
+    <br>
+    <form action="http://localhost:5000/login" method="POST">
+      <label for="tb_user">&nbsp;User:</label>
+      <input type="text" id="tb_user" name="tb_user">
+      <input type="submit" value="Submit">
+    </form>
+  </div>
 
 </body>
-</html>
 
+</html>
