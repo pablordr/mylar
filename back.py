@@ -1,9 +1,8 @@
 from flask import Flask, request, render_template, redirect, url_for, make_response
 from datetime import datetime
 import sqlite3
+import os
 
-
-BASE_URL='http://localhost:8080'
 
 app = Flask(__name__)
 
@@ -65,7 +64,7 @@ def login():
         return resp
     elif request.method == 'GET':
         cookie_val = request.cookies.get('user_name')
-        return render_template('login.html', user=user, base_url=BASE_URL)
+        return render_template('login.html', user=user)
 
 @app.route('/entries')
 def show_entries():
@@ -87,7 +86,7 @@ def add_title():
             'entry_title': entry_title
         }
         update_db(db_data, action='add')
-        return render_template('add.html', user=user, msg='Data added successfully',base_url=BASE_URL)
+        return render_template('add.html', user=user, msg='Data added successfully')
 
 @app.route('/entry', methods=['GET'])
 def show_entry():  
@@ -118,7 +117,7 @@ def edit_entry():
                 msg = 'Error, no entry with that ID.'
                 return render_template('error.html', msg=msg, user=user)
             else:
-                return render_template('edit.html', entry_id = res[0][0], entry_title = res[0][1], user=user, base_url=BASE_URL)
+                return render_template('edit.html', entry_id = res[0][0], entry_title = res[0][1], user=user)
     elif request.method == 'POST':
         form_data = request.form
         entry_id =  form_data['entry_id']
