@@ -1,5 +1,5 @@
 <html>
-<body>
+
 <div style="margin:0px 0px 10px 0px; padding:4px; border: 1px solid black; vertical-align: center;">
 <a href="/add">Add an entry</a>
 <a href="/edit">Edit an entry</a>
@@ -7,7 +7,13 @@
 <a href="/entries">List all entries</a>
 </div>
 
-{{ msg }}
+<table border=1>
+<tr>
+{% for item in res %}
+  <td>{{ item[0] }}</td>
+  <td>{{ item[1] }}</td>
+</tr>
+{% endfor %}
+</tr>
 
-</body>
 </html>

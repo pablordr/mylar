@@ -19,10 +19,19 @@ def update_db(db_data,action):
     con.commit()
     con.close()
 
-def query_db(entry_id):
+def query_db_entry(entry_id):
     con = sqlite3.connect('mylar.db')
     cur = con.cursor()
-    q = "SELECT * FROM entries WHERE id=%s" % (entry_id)
+    q = "select * from entries where id=%s" % (entry_id)
+    cur.execute(q)
+    res = cur.fetchall()
+    con.close()
+    return res
+
+def query_db_all():
+    con = sqlite3.connect('mylar.db')
+    cur = con.cursor()
+    q = "select * from entries order by id ASC"
     cur.execute(q)
     res = cur.fetchall()
     con.close()
@@ -30,7 +39,12 @@ def query_db(entry_id):
 
 @app.route("/")
 def show_root():
-    return "this is /"
+    return render_template("index.html")
+
+@app.route("/entries")
+def show_entries():
+    res = query_db_all()
+    return render_template('entries_view.html',res=res)
 
 @app.route("/add", methods=["GET","POST"])
 def add_title():
@@ -51,11 +65,11 @@ def add_title():
 def show_entry():
     entry_id = request.args.get('id')
     if entry_id is None: 
-        msg = "Error: No ID specified"
+        msg = "Error: No ID specified. Enter something like /entry?id=<ID>."
         return render_template('error.html', msg=msg)
 
     else:
-        res = query_db(entry_id)
+        res = query_db_entry(entry_id)
         # Eval res
         if len(res) == 0:
             msg = "Error, no entry with that ID"
@@ -69,10 +83,10 @@ def edit_entry():
     if request.method == "GET":
         entry_id = request.args.get('id')
         if entry_id is None:
-            msg = "Error: No ID specified."
+            msg = "Error: No ID specified. Enter something like /edit?id=<ID>"
             return render_template('error.html', msg = msg)
         else:
-            res = query_db(entry_id)
+            res = query_db_entry(entry_id)
             if len(res) == 0:
                 msg = "Error, no entry with that ID"
                 return render_template('error.html', msg = msg)
