@@ -17,6 +17,15 @@
     #cont {
       margin: 2em;
     }
+
+    #telemetry {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      font-family: monospace;
+      color: #666;
+      padding: .5em;
+    }
   </style>
 </head>
 
@@ -48,7 +57,7 @@
 
     <table border=1>
       <tr>
-      {% for item in res %}
+        {% for item in res %}
         <td><a href="/entry?id={{ item[0] }}">{{ item[0] }}</a></td>
         <td>{{ item[1] }}</td>
       </tr>
@@ -58,14 +67,9 @@
 
   </div>
 
+  <div id="telemetry">
+    Local IP: {{ telemetry[0] }}; Hostname: {{ telemetry[1] }}
+  </div>
 </body>
 
 </html>
-
-
-
-
-
-
-
-

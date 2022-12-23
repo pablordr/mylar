@@ -2,7 +2,7 @@ from flask import Flask, request, render_template, redirect, url_for, make_respo
 from datetime import datetime
 import sqlite3
 import os
-
+import socket
 
 app = Flask(__name__)
 
@@ -46,12 +46,17 @@ def query_db_all():
     con.close()
     return res
 
+def get_telemetry():
+    hostname = socket.gethostname()
+    local_ip = socket.gethostbyname(hostname)
+    return (local_ip,hostname)
+
 # ** ROUTES ** 
 
 @app.route('/')
 def show_root():
     user = request.cookies.get('user_name') 
-    return render_template('index.html', user=user)
+    return render_template('index.html', user=user, telemetry=get_telemetry())
 
 @app.route('/login', methods=['GET','POST'])
 def login():
@@ -64,19 +69,19 @@ def login():
         return resp
     elif request.method == 'GET':
         cookie_val = request.cookies.get('user_name')
-        return render_template('login.html', user=user)
+        return render_template('login.html', user=user, telemetry=get_telemetry())
 
 @app.route('/entries')
 def show_entries():
     user = request.cookies.get('user_name') 
     res = query_db_all()
-    return render_template('entries_view.html', user=user, res=res)
+    return render_template('entries_view.html', user=user, res=res, telemetry=get_telemetry())
 
 @app.route('/add', methods=['GET','POST'])
 def add_title():
     user = request.cookies.get('user_name')
     if request.method == 'GET':
-        return render_template('add.html', user=user)
+        return render_template('add.html', user=user, telemetry=get_telemetry())
     elif request.method == 'POST':
         form_data = request.form
         entry_id =  form_data['entry_id']
@@ -94,14 +99,14 @@ def show_entry():
     entry_id = request.args.get('id')
     if entry_id is None: 
         msg = 'Error: No ID specified. Enter something like /entry?id=<ID>.'
-        return render_template('error.html', msg=msg, user=user)
+        return render_template('error.html', msg=msg, user=user, telemetry=get_telemetry())
     else:
         res = query_db_entry(entry_id)
         if len(res) == 0:
             msg = 'Error, no entry with that ID'
             return render_template('error.html', msg=msg, user=user)
         else:
-            return render_template('entry_view.html', entry_id = res[0][0], entry_title = res[0][1], user=user)
+            return render_template('entry_view.html', entry_id = res[0][0], entry_title = res[0][1], user=user, telemetry=get_telemetry())
 
 @app.route('/edit', methods=['GET','POST'])
 def edit_entry():
@@ -110,14 +115,14 @@ def edit_entry():
         entry_id = request.args.get('id')
         if entry_id is None:
             msg = 'Error: No ID specified. Enter something like /edit?id=<ID>.'
-            return render_template('error.html', msg=msg, user=user)
+            return render_template('error.html', msg=msg, user=user, telemetry=get_telemetry())
         else:
             res = query_db_entry(entry_id)
             if len(res) == 0:
                 msg = 'Error, no entry with that ID.'
                 return render_template('error.html', msg=msg, user=user)
             else:
-                return render_template('edit.html', entry_id = res[0][0], entry_title = res[0][1], user=user)
+                return render_template('edit.html', entry_id = res[0][0], entry_title = res[0][1], user=user, telemetry=get_telemetry())
     elif request.method == 'POST':
         form_data = request.form
         entry_id =  form_data['entry_id']

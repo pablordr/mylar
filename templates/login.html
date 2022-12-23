@@ -17,6 +17,15 @@
     #cont {
       margin: 2em;
     }
+
+    #telemetry {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      font-family: monospace;
+      color: #666;
+      padding: .5em;
+    }
   </style>
 </head>
 
@@ -55,5 +64,9 @@
   </div>
 
 </body>
+
+<div id="telemetry">
+  Local IP: {{ telemetry[0] }}; Hostname: {{ telemetry[1] }}
+</div>
 
 </html>
