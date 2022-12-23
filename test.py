@@ -36,5 +36,17 @@ cur = con.cursor()
 cur.execute('SELECT * FROM entries')
 res = cur.fetchall()
 print(res)
-
 con.close()
+
+#**** testing entry edit ***#
+
+print("\nTesting /edit POST")
+print(20*'-')
+
+data = { "entry_id": 4, "entry_title": "test_entry_title" }
+
+response = requests.post(base_url+'/edit?id=4', data=data)
+print(response.status_code)
+print(response.text)
+
+
