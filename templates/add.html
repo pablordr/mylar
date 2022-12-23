@@ -1,0 +1,25 @@
+<html>
+<body>
+
+
+{% if msg %}
+  {{ msg }}
+{% else %}
+   <!-- no message, add nothing -->
+{% endif %}
+
+<br>
+Add something
+
+<form action="http://localhost:5000/add" method="POST">
+  <label for="tb_id">id:</label>
+  <input type="text" id="entry_id" name="entry_id">
+  <br /><br />
+  <label for="tb_title">title:</label>
+  <input type="text" id="entry_title" name="entry_title">
+  <br /><br />
+  <input type="submit" value"add">
+</form>
+
+</body>
+</html>

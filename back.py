@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, request, render_template, redirect
 from datetime import datetime
 
 app = Flask(__name__)
@@ -7,20 +7,15 @@ app = Flask(__name__)
 def show_root():
     return "this is /"
 
-@app.route("/filewrite")
-def file_write():
-    f = open('file.txt','w')
-    now = datetime.strftime(datetime.now(), "%Y-%m-%d %H:%M:%S")
-    f.write(now)
-    f.close()
-    return "File Updated"
-    
-@app.route("/fileread")
-def file_read():
-    f = open('file.txt','r')
-    s = f.readlines()[0]
-    f.close()
-    return s
+@app.route("/add", methods=["GET","POST"])
+def add_title():
+    if request.method == "GET":
+        return render_template('add.html')
+    elif request.method == "POST":
+        form_data = request.form
+        entry_id =  form_data['entry_id']
+        entry_title = form_data['entry_title']
+        return render_template('add.html', msg="Data added successfully")
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000, debug=True)

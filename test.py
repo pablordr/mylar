@@ -1,26 +1,28 @@
 import requests
 
+base_url = 'http://localhost:5000'
+
 print("Testing /")
 print(20*'-')
 
-response = requests.get('http://localhost:5000')
+response = requests.get(base_url)
 
 print(response.status_code)
 print(response.text)
 
-print("\nTesting /filewrite")
+print("\nTesting /add POST")
 print(20*'-')
 
-response = requests.get('http://localhost:5000/filewrite')
+data = { "entry_id": "test_entry_id", "entry_title": "test_entry_title" }
 
+response = requests.post(base_url+'/add', data=data)
 print(response.status_code)
 print(response.text)
 
-print("\nTesting /fileread")
+print("\nTesting /add GET")
 print(20*'-')
 
-response = requests.get('http://localhost:5000/fileread')
-
+response = requests.get(base_url+'/add')
 print(response.status_code)
 print(response.text)
 
