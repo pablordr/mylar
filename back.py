@@ -4,17 +4,24 @@ import sqlite3
 
 app = Flask(__name__)
 
-def update_db(db_data,action): 
+# ** HELPER FUNCTIONS **
+
+def update_db(db_data,action):
+    """ Updates DG either an INSERT or an UPDATE
+        depends on 'action' parameter. Values:
+        - add: it will insert db_data into the db.
+        - edit: it will update db_data.
+    """
     con = sqlite3.connect('mylar.db')
     cur = con.cursor()
     # TODO: Remove this to make less calls in the future. Add to init script.
-    q = "CREATE TABLE IF NOT EXISTS entries (id INT, title TEXT)"
+    q = 'CREATE TABLE IF NOT EXISTS entries (id INT, title TEXT)'
     cur.execute(q)
     con.commit()
     if action == 'add':
-        q = "INSERT INTO entries (id, title) VALUES (%s,'%s')" % (db_data['entry_id'], db_data['entry_title'])
+        q = 'INSERT INTO entries (id, title) VALUES (%s,"%s")' % (db_data['entry_id'], db_data['entry_title'])
     elif action == 'edit':
-        q = "UPDATE entries SET id=%s, title='%s' WHERE id=%s" % (db_data['entry_id'], db_data['entry_title'], db_data['entry_id'])
+        q = 'UPDATE entries SET id=%s, title="%s" WHERE id=%s' % (db_data['entry_id'], db_data['entry_title'], db_data['entry_id'])
     cur.execute(q)
     con.commit()
     con.close()
@@ -22,7 +29,7 @@ def update_db(db_data,action):
 def query_db_entry(entry_id):
     con = sqlite3.connect('mylar.db')
     cur = con.cursor()
-    q = "select * from entries where id=%s" % (entry_id)
+    q = 'select * from entries where id=%s' % (entry_id)
     cur.execute(q)
     res = cur.fetchall()
     con.close()
@@ -31,7 +38,7 @@ def query_db_entry(entry_id):
 def query_db_all():
     con = sqlite3.connect('mylar.db')
     cur = con.cursor()
-    q = "select * from entries order by id ASC"
+    q = 'select * from entries order by id ASC'
     cur.execute(q)
     res = cur.fetchall()
     con.close()
@@ -39,10 +46,10 @@ def query_db_all():
 
 # ** ROUTES ** 
 
-@app.route("/")
+@app.route('/')
 def show_root():
     user = request.cookies.get('user_name') 
-    return render_template("index.html", user=user)
+    return render_template('index.html', user=user)
 
 @app.route('/login', methods=['GET','POST'])
 def login():
@@ -50,81 +57,76 @@ def login():
     if request.method == 'POST':
         form_data = request.form
         user = form_data['tb_user']
-        res = make_response(redirect(url_for('show_root')))
-        res.set_cookie('user_name',user)
-        return res
-
+        resp = make_response(redirect(url_for('show_root')))
+        resp.set_cookie('user_name',user)
+        return resp
     elif request.method == 'GET':
-        print('En get')
         cookie_val = request.cookies.get('user_name')
         return render_template('login.html', user=user)
 
-@app.route("/entries")
+@app.route('/entries')
 def show_entries():
     user = request.cookies.get('user_name') 
     res = query_db_all()
     return render_template('entries_view.html', user=user, res=res)
 
-@app.route("/add", methods=["GET","POST"])
+@app.route('/add', methods=['GET','POST'])
 def add_title():
     user = request.cookies.get('user_name')
-    if request.method == "GET":
+    if request.method == 'GET':
         return render_template('add.html', user=user)
-    elif request.method == "POST":
+    elif request.method == 'POST':
         form_data = request.form
         entry_id =  form_data['entry_id']
         entry_title = form_data['entry_title']
         db_data = {
-            "entry_id": entry_id,
-            "entry_title": entry_title
+            'entry_id': entry_id,
+            'entry_title': entry_title
         }
-        update_db(db_data, action="add")
-        return render_template('add.html', user=user, msg="Data added successfully")
+        update_db(db_data, action='add')
+        return render_template('add.html', user=user, msg='Data added successfully')
 
-@app.route("/entry", methods=["GET"])
+@app.route('/entry', methods=['GET'])
 def show_entry():  
     user = request.cookies.get('user_name') 
     entry_id = request.args.get('id')
     if entry_id is None: 
-        msg = "Error: No ID specified. Enter something like /entry?id=<ID>."
+        msg = 'Error: No ID specified. Enter something like /entry?id=<ID>.'
         return render_template('error.html', msg=msg, user=user)
     else:
         res = query_db_entry(entry_id)
-        # Eval res
         if len(res) == 0:
-            msg = "Error, no entry with that ID"
+            msg = 'Error, no entry with that ID'
             return render_template('error.html', msg=msg, user=user)
         else:
-            # return res saving this one for future api json response
             return render_template('entry_view.html', entry_id = res[0][0], entry_title = res[0][1], user=user)
 
-@app.route("/edit", methods=["GET","POST"])
+@app.route('/edit', methods=['GET','POST'])
 def edit_entry():
     user = request.cookies.get('user_name') 
-    if request.method == "GET":
+    if request.method == 'GET':
         entry_id = request.args.get('id')
         if entry_id is None:
-            msg = "Error: No ID specified. Enter something like /edit?id=<ID>"
+            msg = 'Error: No ID specified. Enter something like /edit?id=<ID>.'
             return render_template('error.html', msg=msg, user=user)
         else:
             res = query_db_entry(entry_id)
             if len(res) == 0:
-                msg = "Error, no entry with that ID"
+                msg = 'Error, no entry with that ID.'
                 return render_template('error.html', msg=msg, user=user)
             else:
                 return render_template('edit.html', entry_id = res[0][0], entry_title = res[0][1], user=user)
-    elif request.method == "POST":
+    elif request.method == 'POST':
         form_data = request.form
         entry_id =  form_data['entry_id']
         entry_title = form_data['entry_title']
         db_data = {
-            "entry_id": entry_id,
-            "entry_title": entry_title
+            'entry_id': entry_id,
+            'entry_title': entry_title
         }
-        update_db(db_data, action="edit")
-        return redirect('/entry?id=%s' % (entry_id))
-        return render_template('entry_view.html', msg="Data updated successfully")
+        update_db(db_data, action='edit')
+        return render_template('entry_view.html', msg='Data updated successfully', entry_id=entry_id, entry_title=entry_title)
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
