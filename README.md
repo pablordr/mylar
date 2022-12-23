@@ -1,5 +1,11 @@
 a sample web app to test things on
 
+Checkpoint 3: Docker
+
+- Now it runs on docker
+- Added BASE_URL variable for templates to use the correct endpoint.
+- Should run with `docker run -d -p 8080:5000 --name mylar mylar:latest`
+
 Checkpoint 2: Cookies
 
 - Now it has a simple user_name cookie. Easy to manipulate. 

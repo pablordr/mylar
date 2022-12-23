@@ -47,7 +47,7 @@
     {% endif %}
 
     <br>
-    <form action="http://localhost:5000/login" method="POST">
+    <form action="{{ base_url }}/login" method="POST">
       <label for="tb_user">&nbsp;User:</label>
       <input type="text" id="tb_user" name="tb_user">
       <input type="submit" value="Submit">
