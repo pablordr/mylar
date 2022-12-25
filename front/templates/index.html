@@ -34,7 +34,6 @@
     <tr>
       <td width="60%">
         <a href="/add">Add entry &nbsp;</a>
-        <a href="/edit">Edit entry &nbsp;</a>
         <a href="/entry">Check entry &nbsp;</a>
         <a href="/entries">List entries &nbsp;</a>
         <a href="/login">Login</a>
@@ -54,22 +53,12 @@
     {% if msg %}
     {{ msg }}
     {% endif %}
-
-    <table border=1>
-      <tr>
-        {% for item in res %}
-        <td><a href="/entry?id={{ item[0] }}">{{ item[0] }}</a></td>
-        <td>{{ item[1] }}</td>
-      </tr>
-      {% endfor %}
-      </tr>
-    </table>
-
   </div>
 
   <div id="telemetry">
     Local IP: {{ telemetry[0] }}; Hostname: {{ telemetry[1] }}
   </div>
+
 </body>
 
 </html>

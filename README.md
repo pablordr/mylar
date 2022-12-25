@@ -1,5 +1,13 @@
 a sample web app to test things on
 
+Checkpoint 4: Decoupling of front & back
+
+- Back as separate server, works only as API. 
+- Front as separate server only makes API requests.
+    - Front includes teh `API_ENDPOINT` variable that points to the API.
+- Each front instance shows its IP & hostname
+
+
 Checkpoint 3: Docker
 
 - Now it runs on docker
@@ -24,5 +32,4 @@ Checkpoint 1: Minimum features
 TODO:
 
 - Field type verification (id must be an INT, etc.)
-
-
+- Repeated ID validation 
