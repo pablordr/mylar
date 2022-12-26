@@ -2,7 +2,7 @@ FROM alpine:latest
 COPY . /app
 WORKDIR $HOME/app
 
-ENV API_ENDPOINT "http://172.19.0.2:5000"
+ENV API_ENDPOINT "http://api:5000"
 
 RUN apk update
 RUN apk add python3 py3-pip
