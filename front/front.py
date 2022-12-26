@@ -4,8 +4,6 @@ import requests
 import json
 import os
 
-#API_ENDPOINT='http://localhost:8080'
-
 API_ENDPOINT=os.environ.get("API_ENDPOINT")
 
 app = Flask(__name__)
