@@ -1,10 +1,12 @@
 a sample web app to test things on
 
+Checkpoint 5: Docker compose
+
 Checkpoint 4: Decoupling of front & back
 
 - Back as separate server, works only as API. 
 - Front as separate server only makes API requests.
-    - Front includes teh `API_ENDPOINT` variable that points to the API.
+    - Front includes the `API_ENDPOINT` variable that points to the API.
 - Each front instance shows its IP & hostname
 
 
